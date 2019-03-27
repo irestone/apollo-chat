@@ -19,7 +19,7 @@ export default gql`
       email: String!
       password: String!
       username: String!
-      name: String
+      name: String!
     ): User
   }
 `

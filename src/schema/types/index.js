@@ -1,4 +1,4 @@
 import root from './root'
-import User from './user'
+import User from './User'
 
 export default [root, User]
