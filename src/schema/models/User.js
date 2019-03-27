@@ -13,15 +13,10 @@ const schema = new Schema(
   }
 )
 
-schema.pre('save', async function (next) {
+schema.pre('save', async function () {
   if (this.isModified('password')) {
-    try {
-      this.password = await hash(this.password, 10)
-    } catch (e) {
-      next(e)
-    }
+    this.password = await hash(this.password, 10)
   }
-  next()
 })
 
 export default model('User', schema)
