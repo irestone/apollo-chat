@@ -8,9 +8,7 @@ const schema = Joi.object().keys({
   password: Joi.string()
     .label('Password')
     .required()
-    .regex(
-      /^(?=.*[A-Za-z])(?=.*\d)[\w`~!?@#$%^&*()\-=+{}[\];:'"<>,./\\|]{5,100}$/
-    )
+    .regex(/^(?=\S*[A-Za-z])(?=\S*\d)\S*$/)
     .min(5)
     .max(100)
     .options({
