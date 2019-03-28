@@ -11,6 +11,8 @@ const schema = Joi.object().keys({
     .regex(
       /^(?=.*[A-Za-z])(?=.*\d)[\w`~!?@#$%^&*()\-=+{}[\];:'"<>,./\\|]{5,100}$/
     )
+    .min(5)
+    .max(100)
     .options({
       language: {
         string: {
