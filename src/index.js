@@ -21,7 +21,7 @@ const run = async () => {
     const Redis = connectRedis(expressSession)
     session.store = new Redis({ ...redis })
 
-    // INITIALIZIN APP
+    // INITIALIZING
 
     const app = new Express()
 
@@ -51,13 +51,12 @@ const run = async () => {
       playground: !inProduction && {
         settings: { 'request.credentials': 'include' }
       },
-      context: ({ req, res }) => ({ req, res }),
-      cors: false
+      context: ({ req, res }) => ({ req, res })
     })
 
-    apollo.applyMiddleware({ app })
+    apollo.applyMiddleware({ app, cors: false })
 
-    // STARTING UP THE APP
+    // STARTING UP
 
     app.listen({ port }, () =>
       console.log(`
