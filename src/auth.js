@@ -42,9 +42,7 @@ perform.signUp = async (ctx, args) => {
 }
 
 perform.signIn = async (ctx, args) => {
-  if (is.signedIn(ctx)) {
-    return users.findById(ctx.req.session.userId)
-  }
+  check.signedOut(ctx)
   validate.mutation.signIn(args)
   const user = await users.findOne({ email: args.email })
   if (!user || !user.matchesPassword(args.password)) {
