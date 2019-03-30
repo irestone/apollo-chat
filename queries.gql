@@ -35,6 +35,15 @@ mutation {
 }
 
 {
+  user(id: "5c9e26b5005f1c247452451a") {
+    id
+    email
+    username
+    name
+  }
+}
+
+{
   users {
     id
     email
