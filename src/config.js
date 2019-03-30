@@ -4,14 +4,14 @@ const {
   DB_PASS,
   DB_PORT,
   DB_USER,
-  NODE_ENV,
-  PORT,
+  NODE_ENV = 'development',
+  PORT = 8080,
   REDIS_HOST,
   REDIS_PORT,
   REDIS_PASSWORD,
-  SESSION_LIFETIME,
-  SESSION_NAME,
-  SESSION_SECRET
+  SESS_LIFETIME = 3600000,
+  SESS_NAME = 'sid',
+  SESS_SECRET = 'secret'
 } = process.env
 
 export const port = PORT
@@ -27,9 +27,9 @@ export const db = {
 }
 
 export const session = {
-  name: SESSION_NAME,
-  secret: SESSION_SECRET,
-  lifetime: parseInt(SESSION_LIFETIME)
+  name: SESS_NAME,
+  secret: SESS_SECRET,
+  lifetime: parseInt(SESS_LIFETIME)
 }
 
 export const redis = {
