@@ -1,52 +1,40 @@
-import mongoose from 'mongoose'
-import { UserInputError } from 'apollo-server-express'
-
 import { User as users } from '../models'
 import { User as validate } from '../validators'
 import * as auth from '../auth'
 
-export default {
-  Query: {
-    me: (_, __, { req }) => {
-      // todo projection
-      auth.check.signedIn(req)
-      return users.findById(req.session.userId)
-    },
-    users: (_, __, { req }) => {
-      // todo projection, sanitization, pagination
-      auth.check.signedIn(req)
-      return users.find()
-    },
-    user: (_, { id }, { req }) => {
-      // todo projection, sanitization
-      auth.check.signedIn(req)
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        throw new UserInputError(`'${id}' is not a valid user ID`)
-      }
-      return users.findById(id)
-    }
-  },
-  Mutation: {
-    signUp: async (_, args, { req }) => {
-      auth.check.signedOut(req)
-      validate.signUp(args)
-      const user = await users.create(args)
-      req.session.userId = user.id
-      return user
-    },
-    signIn: async (_, args, { req }) => {
-      if (auth.isSignedIn(req)) {
-        return users.findById(req.session.userId)
-      }
-      validate.signIn(args)
-      const user = await auth.perform.signIn(args)
-      req.session.userId = user.id
-      return user
-    },
-    signOut: async (_, __, { req, res }) => {
-      auth.check.signedIn(req)
-      await auth.perform.signOut(req, res)
-      return true
-    }
-  }
+const User = {}
+
+export default User
+
+// /////////////////////////////////////////////////////////////////////////////
+// QUERIES
+
+User.Query = {}
+
+// todo projection
+User.Query.me = (_, __, ctx) => {
+  auth.check.signedIn(ctx)
+  return users.findById(ctx.req.session.userId)
 }
+
+// todo projection, sanitization
+User.Query.user = (_, { id }, ctx) => {
+  auth.check.signedIn(ctx)
+  validate.key.id(id)
+  return users.findById(id)
+}
+
+// todo projection, sanitization, pagination
+User.Query.users = (_, __, ctx) => {
+  auth.check.signedIn(ctx)
+  return users.find()
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+// MUTATIONS
+
+User.Mutation = {}
+
+User.Mutation.signUp = (_, args, ctx) => auth.perform.signUp(ctx, args)
+User.Mutation.signIn = (_, args, ctx) => auth.perform.signIn(ctx, args)
+User.Mutation.signOut = (_, __, ctx) => auth.perform.signOut(ctx)

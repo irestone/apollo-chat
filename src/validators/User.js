@@ -1,4 +1,13 @@
 import Joi from 'joi'
+import mongoose from 'mongoose'
+import { UserInputError } from 'apollo-server-express'
+
+const User = {}
+
+export default User
+
+// /////////////////////////////////////////////////////////////////////////////
+// JOI HELPERS
 
 const schema = (keys) => Joi.object().keys(keys)
 
@@ -8,7 +17,7 @@ const validate = (values, shema) => {
 }
 
 // /////////////////////////////////////////////////////////////////////////////
-// VALUES
+// JOI KEYS
 
 const email = Joi.string()
   .label('Email')
@@ -43,9 +52,21 @@ const name = Joi.string()
 // /////////////////////////////////////////////////////////////////////////////
 // VALIDATORS
 
-const signUp = (values) =>
-  validate(values, schema({ email, password, username, name }))
+// Mutations (actions)
 
-const signIn = (values) => validate(values, schema({ email, password }))
+User.mutation = {}
 
-export default { signUp, signIn }
+User.mutation.signUp = (args) =>
+  validate(args, schema({ email, password, username, name }))
+
+User.mutation.signIn = (args) => validate(args, schema({ email, password }))
+
+// Keys (fields)
+
+User.key = {}
+
+User.key.id = (id) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new UserInputError(`'${id}' is not a valid user ID`)
+  }
+}
