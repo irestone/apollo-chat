@@ -10,6 +10,7 @@ export default gql`
   }
 
   extend type Query {
+    me: User
     user(id: ID!): User
     users: [User!]!
   }
@@ -21,5 +22,7 @@ export default gql`
       username: String!
       name: String!
     ): User
+    signIn(email: String!, password: String!): User
+    signOut: Boolean!
   }
 `

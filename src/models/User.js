@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import { hash } from 'bcryptjs'
+import { hash, compareSync } from 'bcryptjs'
 
 const schema = new Schema(
   {
@@ -29,6 +29,10 @@ const schema = new Schema(
 
 schema.statics.doesntExist = async function (params) {
   return !(await this.findOne(params))
+}
+
+schema.methods.matchesPassword = function (password) {
+  return compareSync(password, this.password)
 }
 
 schema.pre('save', async function () {
