@@ -1,13 +1,14 @@
 import { model, Schema } from 'mongoose'
 import { hash, compareSync } from 'bcryptjs'
 
+const { ObjectId } = Schema.Types
+
 const schema = new Schema(
   {
     email: {
       type: String,
       validate: {
         validator: (email) => User.doesntExist({ email }),
-        // todo security
         message: () => `The user with this email address already exists.`
       }
     },
@@ -15,12 +16,12 @@ const schema = new Schema(
       type: String,
       validate: {
         validator: (username) => User.doesntExist({ username }),
-        // todo security
         message: () => `The user with this username already exists.`
       }
     },
     password: String,
-    name: String
+    name: String,
+    chats: [{ type: ObjectId, ref: 'Chat' }]
   },
   {
     timestamps: true
