@@ -4,26 +4,30 @@ import { User as users } from './models'
 import { User as validate } from './validators'
 import { session } from './config'
 
+const auth = {}
+
+export default auth
+
 // /////////////////////////////////////////////////////////////////////////////
 // PREDICATES
 
-export const is = {}
+auth.is = {}
 
-is.signedIn = ({ req }) => !!req.session.userId
+auth.is.signedIn = ({ req }) => !!req.session.userId
 
 // /////////////////////////////////////////////////////////////////////////////
 // CHECKS
 
-export const check = {}
+auth.ensure = {}
 
-check.signedIn = (ctx) => {
-  if (!is.signedIn(ctx)) {
+auth.ensure.signedIn = (ctx) => {
+  if (!auth.is.signedIn(ctx)) {
     throw new AuthenticationError('You are not signed in.')
   }
 }
 
-check.signedOut = (ctx) => {
-  if (is.signedIn(ctx)) {
+auth.ensure.signedOut = (ctx) => {
+  if (auth.is.signedIn(ctx)) {
     throw new AuthenticationError('You are signed in.')
   }
 }
@@ -31,19 +35,17 @@ check.signedOut = (ctx) => {
 // /////////////////////////////////////////////////////////////////////////////
 // ACTIONS
 
-export const perform = {}
+auth.perform = {}
 
-perform.signUp = async (ctx, args) => {
-  check.signedOut(ctx)
-  validate.mutation.signUp(args)
+auth.perform.signUp = async (ctx, args) => {
+  validate.input.signUp(args)
   const user = await users.create(args)
   ctx.req.session.userId = user.id
   return user
 }
 
-perform.signIn = async (ctx, args) => {
-  check.signedOut(ctx)
-  validate.mutation.signIn(args)
+auth.perform.signIn = async (ctx, args) => {
+  validate.input.signIn(args)
   const user = await users.findOne({ email: args.email })
   if (!user || !user.matchesPassword(args.password)) {
     throw new AuthenticationError('Incorrect email or password.')
@@ -52,8 +54,7 @@ perform.signIn = async (ctx, args) => {
   return user
 }
 
-perform.signOut = (ctx) => {
-  check.signedIn(ctx)
+auth.perform.signOut = (ctx) => {
   return new Promise((resolve, reject) => {
     ctx.req.session.destroy((err) => {
       if (err) reject(err)
