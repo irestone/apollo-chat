@@ -1,23 +1,18 @@
-import Joi from 'joi'
-import mongoose from 'mongoose'
-import { UserInputError } from 'apollo-server-express'
+import Joi from './joi'
 
-const validate = {}
+const validate = {
+  input: {},
+  field: {}
+}
 
 export default validate
 
 // /////////////////////////////////////////////////////////////////////////////
-// JOI HELPERS
+// SCHEMAS
 
-const schema = (keys) => Joi.object().keys(keys)
-
-const validator = (args, shema) => {
-  const { error } = Joi.validate(args, shema, { abortEarly: false })
-  if (error) throw error
-}
-
-// /////////////////////////////////////////////////////////////////////////////
-// JOI KEYS
+const id = Joi.string()
+  .label('User ID')
+  .objectId()
 
 const email = Joi.string()
   .label('Email')
@@ -52,21 +47,13 @@ const name = Joi.string()
 // /////////////////////////////////////////////////////////////////////////////
 // VALIDATORS
 
-// Mutations inputs
+// Inputs
 
-validate.input = {}
+validate.input.signUp = (value) =>
+  Joi.validateSync(value, { email, password, username, name })
 
-validate.input.signUp = (args) =>
-  validator(args, schema({ email, password, username, name }))
-
-validate.input.signIn = (args) => validator(args, schema({ email, password }))
+validate.input.signIn = (value) => Joi.validateSync(value, { email, password })
 
 // Fields
 
-validate.field = {}
-
-validate.field.id = (id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new UserInputError(`'${id}' is not a valid user ID`)
-  }
-}
+validate.field.id = (value) => Joi.validateSync(value, id)
