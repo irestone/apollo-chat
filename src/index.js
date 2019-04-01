@@ -31,8 +31,9 @@ const run = async () => {
         store: session.store,
         name: session.name,
         secret: session.secret,
-        resave: false,
         saveUninitialized: false,
+        resave: true,
+        rolling: true,
         cookie: {
           sameSite: true,
           secure: inProduction,
