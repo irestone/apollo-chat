@@ -7,6 +7,7 @@ import { ApolloServer } from 'apollo-server-express'
 
 import typeDefs from './types'
 import resolvers from './resolvers'
+import schemaDirectives from './directives'
 import { port, inProduction, db, session, redis } from './config'
 
 const run = async () => {
@@ -48,6 +49,7 @@ const run = async () => {
     const apollo = new ApolloServer({
       typeDefs,
       resolvers,
+      schemaDirectives,
       playground: !inProduction && {
         settings: { 'request.credentials': 'include' }
       },

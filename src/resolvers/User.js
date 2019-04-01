@@ -1,6 +1,6 @@
 import { User as users } from '../models'
 import { User as validate } from '../validators'
-import * as auth from '../auth'
+import auth from '../auth'
 
 const User = {}
 
@@ -12,22 +12,15 @@ export default User
 User.Query = {}
 
 // todo projection
-User.Query.me = (_, __, ctx) => {
-  auth.check.signedIn(ctx)
-  return users.findById(ctx.req.session.userId)
-}
-
-// todo projection, sanitization
-User.Query.user = (_, { id }, ctx) => {
-  auth.check.signedIn(ctx)
-  validate.key.id(id)
-  return users.findById(id)
-}
+User.Query.me = (_, __, { req }) => users.findById(req.session.userId)
 
 // todo projection, sanitization, pagination
-User.Query.users = (_, __, ctx) => {
-  auth.check.signedIn(ctx)
-  return users.find()
+User.Query.users = (_, __, ctx) => users.find()
+
+// todo projection, sanitization
+User.Query.user = (_, { id }) => {
+  validate.field.id(id)
+  return users.findById(id)
 }
 
 // /////////////////////////////////////////////////////////////////////////////
