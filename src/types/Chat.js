@@ -10,4 +10,8 @@ export default gql`
     createdAt: String!
     updatedAt: String!
   }
+
+  extend type Mutation {
+    startChat(userIds: [ID!]!, title: String): Chat @user
+  }
 `
