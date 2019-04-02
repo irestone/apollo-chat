@@ -1,5 +1,10 @@
 **Relations**:
-[User](#User) `<-hasMany->` [Chat](#Chat) `-hasMany->` [Message](#Message)
+
+[User](#User) `<-hasMany->` [Chat](#Chat)
+
+[User](#User) `-hasMany->` [Message](#Message)
+
+[Chat](#Chat) `-hasMany->` [Message](#Message)
 
 ---
 
@@ -22,6 +27,8 @@
 - lastMessage: `ObjectId` -> [Message](#Message)
 - createdAt:`Date`
 - updatedAt:`Date`
+
+> __messages__ field is not included in DB directrly for the sake of optimization, but will be resolved in GQL
 
 ### Message
 
