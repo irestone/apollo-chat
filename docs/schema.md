@@ -2,9 +2,9 @@
 
 [User](#User) `<-hasMany->` [Chat](#Chat)
 
-[User](#User) `-hasMany->` [Message](#Message)
+[User](#User) `hasMany->` [Message](#Message)
 
-[Chat](#Chat) `-hasMany->` [Message](#Message)
+[Chat](#Chat) `hasMany->` [Message](#Message)
 
 ---
 
