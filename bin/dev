@@ -1,3 +1,2 @@
 require('dotenv').config()
-require = require('esm')(module)
-require('../src/index')
+require('esm')(module)('../src/index')
