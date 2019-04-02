@@ -1,7 +1,5 @@
 **Relations**:
-[User](#User) `<-many-many->` [Chat](#Chat) `<-one-many` [Message](#Message)
-
-\*`->` - ref
+[User](#User) `<-hasMany->` [Chat](#Chat) `-hasMany->` [Message](#Message)
 
 ---
 
