@@ -9,5 +9,5 @@ type User @auth(requires: USER) {
 ```
 
 - `auth.ensure.not.signedIn(ctx)`
-- update .env
+- update .env.example
 - update api/queries
